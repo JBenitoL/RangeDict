@@ -33,18 +33,35 @@ class RangeDic(dict):
 
     @staticmethod
     def __is_final(txt):
-        pattern = "([<>])([0-9\.]+)"
+        pattern = "([<>])([=]{,1})([0-9\.]+)"
         match = re.match(pattern, txt)
         if match:
-            if match.group(1) == "<":
-                return float(match.group(2)).__gt__
-            if match.group(1) == ">":
-                return float(match.group(2)).__lt__
+            if match.group(2):
+                if match.group(1) == "<":
+                    return float(match.group(3)).__ge__
+                if match.group(1) == ">":
+                    return float(match.group(3)).__le__
+            else:
+                if match.group(1) == "<":
+                    return float(match.group(3)).__gt__
+                if match.group(1) == ">":
+                    return float(match.group(3)).__lt__
 
     @staticmethod
     def __is_range(txt):
-        pattern = "([0-9\.]+)-([0-9\.]+)"
+        pattern = "([\(\[]{,1})([0-9\.]+)-([0-9\.]+)([\)\]]{,1})"
         match = re.match(pattern, txt)
         if match:
-            return lambda x: float(match.group(1)) <= x and float(match.group(2)) > x
+            if match.group(1) == "[" or not match.group(1):
+                if match.group(4) == ")" or not match.group(4):
+                    return lambda x: float(match.group(2)) <= x and float(match.group(3)) > x
+                else:
+                    return lambda x: float(match.group(2)) <= x and float(match.group(3)) >= x
+            else:
+                if match.group(4) == ")" or not match.group(4):
+                    return lambda x: float(match.group(2)) < x and float(match.group(3)) > x
+                else:
+                    return lambda x: float(match.group(2)) < x and float(match.group(3)) >= x
+
+                
 
