@@ -15,8 +15,6 @@ class RangeDic(dict):
                     if value(item):
                         return super().__getitem__(key)
         else:
-            if "custom" in item:
-                return None
             value = super().__getitem__(item)
             if isinstance(value, dict):
                 return RangeDic(value)
@@ -33,7 +31,7 @@ class RangeDic(dict):
 
     @staticmethod
     def __is_final(txt):
-        pattern = "([<>])([=]{,1})([0-9\.]+)"
+        pattern = "([<>])([=]{,1})([-]{,1}[0-9\.]+)"
         match = re.match(pattern, txt)
         if match:
             if match.group(2):
@@ -49,7 +47,7 @@ class RangeDic(dict):
 
     @staticmethod
     def __is_range(txt):
-        pattern = "([\(\[]{,1})([0-9\.]+)-([0-9\.]+)([\)\]]{,1})"
+        pattern = "([\(\[]{,1})([-]{,1}[0-9\.]+)-([-]{,1}[0-9\.]+)([\)\]]{,1})"
         match = re.match(pattern, txt)
         if match:
             if match.group(1) == "[" or not match.group(1):
