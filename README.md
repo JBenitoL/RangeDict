@@ -14,7 +14,8 @@ dict_test = {"a": "a",
               
             "[-2--1)":"Bigger than -2 (included) smaller than -1 (not included)",
               
-              ">=5": "Bigger or equal than 5"}</code>
+              ">=5": "Bigger or equal than 5"}
+  </code>
   
   
 A RangeDict instance is obtained by coding RangeDict(dict_test)  
